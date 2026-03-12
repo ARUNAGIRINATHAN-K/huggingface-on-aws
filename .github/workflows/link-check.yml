@@ -1,0 +1,29 @@
+name: Link Checker
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # Daily at 02:00 UTC
+  workflow_dispatch:
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run lychee link checker
+        uses: lycheeverse/lychee-action@v1.10.0
+        with:
+          args: "--verbose --no-progress **/*.md"
+          output: ./lychee/out.md
+
+      - name: Upload lychee report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lychee-report
+          path: ./lychee/out.md
