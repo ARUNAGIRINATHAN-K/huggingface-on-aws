@@ -18,7 +18,8 @@ jobs:
       - name: Run lychee link checker
         uses: lycheeverse/lychee-action@v1.10.0
         with:
-          args: --verbose --no-progress .
+          args: "--verbose --no-progress **/*.md"
+          output: ./lychee/out.md
 
       - name: Upload lychee report
         if: always()
